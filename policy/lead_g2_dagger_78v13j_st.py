@@ -1,11 +1,13 @@
 """Collect and relabel DAgger flight data, train a visual policy, and evaluate checkpoints."""
 import json, math, os, sys, time
 import numpy as np
-FLAMBE_ROOT = os.environ.get("FLAMBE_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+LOCAL_MODULE_PATHS = [os.path.join(REPO_ROOT, "common"), os.path.join(REPO_ROOT, "expert")]
+FLAMBE_ROOT = os.environ.get("FLAMBE_ROOT", REPO_ROOT)
 FLAMBE_YARDS = os.environ.get("FLAMBE_YARDS", os.path.join(FLAMBE_ROOT, "synth_yards"))
 FLAMBE_TERRA = os.environ.get("FLAMBE_TERRA", os.path.join(FLAMBE_ROOT, "terra"))
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path[:0] = [*LOCAL_MODULE_PATHS, os.path.dirname(os.path.abspath(__file__))]
 os.environ.setdefault("TORCHINDUCTOR_COMPILE_THREADS", "1")
 FAKE = os.environ.get("FAKE_RENDER") == "1"
 AUG = os.environ.get("AUG", "0") == "1"
@@ -83,7 +85,7 @@ def concept_frame(yard, x):
     import gate2_multi as g2
     from scipy.spatial.transform import Rotation as Rot
     x = np.asarray(x, float)
-    sys.path.insert(0, os.path.join(FLAMBE_TERRA, "s10")); import make_labels as mk                    # exact geometry, default 9 x 16 grid (the screen's)
+    sys.path[:0] = [*LOCAL_MODULE_PATHS, os.path.join(FLAMBE_TERRA, "s10")]; import make_labels as mk                    # exact geometry, default 9 x 16 grid (the screen's)
     assert (mk.RH, mk.RW) == (9, 16), f"make_labels grid {mk.RH} x {mk.RW}, not the screen's 9 x 16"
     if yard not in _TRUTH: _TRUTH[yard] = mk.Truth(yard, [g_ for g_ in json.load(open(f"{FLAMBE_YARDS}/yards/{yard}/goals.json"))["goals"] if g_["id"] == "door"][0])
     d, cls = _TRUTH[yard].cast(x[:3], x[6:10]); img = frame(yard, x)

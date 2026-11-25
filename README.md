@@ -18,10 +18,11 @@ I train the camera policy by imitation using DAgger. The expert relabels the sta
 | [`expert/`](expert/) | Privileged-state expert and goal specifications. |
 | [`policy/`](policy/) | DAgger camera student and expert relabelling. |
 | [`eval/`](eval/) | Door-reach and off-axis evaluation, scoring, and the launcher script. |
+| [`common/`](common/) | Shared helpers: yard loading, the base expert, students, scoring and collision checks. |
 
 ## Status and dependencies
 
-FLAMBE is an active research project, and the repository contains research-grade code for simulation only. Some helper modules from the full research codebase are not included yet, so the scripts do not run standalone.
+FLAMBE is an active research project, and the repository contains research-grade code for simulation only. Helper modules shared by the expert, policy and evaluation code are in `common/`. Nothing runs without the generated splat yards and the two external projects below.
 
 Two external dependencies are not included in this repository: the splat simulator [FiGS-Standalone](https://github.com/madang6/FiGS-Standalone) (GPL-3.0) and [SousVide](https://github.com/StanfordMSL/SousVide) (GPL-3.0). Parts of the policy and scoring code build on SousVide's image features and data layout. Point `FLAMBE_TERRA` at the directory containing the `FiGS-Standalone` checkout. The scripts look for the checkout under `$FLAMBE_TERRA/FiGS-Standalone`.
 

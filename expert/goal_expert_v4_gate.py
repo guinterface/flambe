@@ -2,8 +2,14 @@
 from __future__ import annotations
 
 import math
+import os
+import sys
 import numpy as np
 from scipy.spatial.transform import Rotation
+
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+LOCAL_MODULE_PATHS = [os.path.join(REPO_ROOT, "common"), os.path.join(REPO_ROOT, "expert")]
+sys.path[:0] = LOCAL_MODULE_PATHS
 
 import visual_expert_syn as ve
 import goal_expert as gx

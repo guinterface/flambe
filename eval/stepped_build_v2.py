@@ -2,9 +2,12 @@
 import json, math, os, sys
 import numpy as np
 
-FLAMBE_ROOT = os.environ.get("FLAMBE_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+LOCAL_MODULE_PATHS = [os.path.join(REPO_ROOT, "common"), os.path.join(REPO_ROOT, "expert")]
+FLAMBE_ROOT = os.environ.get("FLAMBE_ROOT", REPO_ROOT)
 FLAMBE_YARDS = os.environ.get("FLAMBE_YARDS", os.path.join(FLAMBE_ROOT, "synth_yards"))
 FLAMBE_TERRA = os.environ.get("FLAMBE_TERRA", os.path.join(FLAMBE_ROOT, "terra"))
+sys.path[:0] = LOCAL_MODULE_PATHS
 
 SEED = 20261122; NPER = 25; NCAND = int(os.environ.get("NCAND", "80")); MINSEP = {0: 0.5, 1: 0.5, 2: 1.0}
 HELD = ["syn_001", "syn_006", "syn_007", "syn_008"]; CTRL = os.environ.get("CTRL", "syn_002,syn_013,syn_025,syn_040").split(",")
@@ -31,7 +34,7 @@ def ring(y, band_step, cf):
 
 def cands(G, OUT, y):
     import score
-    sys.path.insert(0, os.path.join(FLAMBE_TERRA, "s10")); import make_labels as mk
+    sys.path[:0] = [*LOCAL_MODULE_PATHS, os.path.join(FLAMBE_TERRA, "s10")]; import make_labels as mk
     from gate0b_expert import _yaw_quat
     score.SY = FLAMBE_YARDS; cf = score.clearance_fn(y); g = door(y); L = np.asarray(g["land_ned"], float); tr = mk.Truth(y, g)
     C, info = [], {}

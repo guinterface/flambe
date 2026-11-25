@@ -20,11 +20,13 @@ from pathlib import Path
 
 import numpy as np
 
-FLAMBE_ROOT = os.environ.get("FLAMBE_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+LOCAL_MODULE_PATHS = [os.path.join(REPO_ROOT, "common"), os.path.join(REPO_ROOT, "expert")]
+FLAMBE_ROOT = os.environ.get("FLAMBE_ROOT", REPO_ROOT)
 FLAMBE_YARDS = os.environ.get("FLAMBE_YARDS", os.path.join(FLAMBE_ROOT, "synth_yards"))
 FLAMBE_TERRA = os.environ.get("FLAMBE_TERRA", os.path.join(FLAMBE_ROOT, "terra"))
 
-sys.path.insert(0, FLAMBE_TERRA)
+sys.path[:0] = [*LOCAL_MODULE_PATHS, FLAMBE_TERRA]
 import visual_expert_syn as ve   # noqa: E402
 
 NAMES = {  # asset id -> what a person would call it

@@ -2,9 +2,12 @@
 import json, os, sys, time
 import numpy as np
 
-FLAMBE_ROOT = os.environ.get("FLAMBE_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+LOCAL_MODULE_PATHS = [os.path.join(REPO_ROOT, "common"), os.path.join(REPO_ROOT, "expert")]
+FLAMBE_ROOT = os.environ.get("FLAMBE_ROOT", REPO_ROOT)
 FLAMBE_YARDS = os.environ.get("FLAMBE_YARDS", os.path.join(FLAMBE_ROOT, "synth_yards"))
 FLAMBE_GATE2 = os.environ.get("FLAMBE_GATE2", os.path.join(FLAMBE_ROOT, "research", "02_experiments", "gate2"))
+sys.path[:0] = LOCAL_MODULE_PATHS
 
 G = FLAMBE_GATE2
 SY = os.path.join(FLAMBE_YARDS, "yards")

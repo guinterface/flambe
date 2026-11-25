@@ -1,12 +1,14 @@
 """Generate expert labels for sampled states from student flights on stepped evaluation starts."""
 import json, os, sys, time
 import numpy as np
-FLAMBE_ROOT = os.environ.get("FLAMBE_ROOT", os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+LOCAL_MODULE_PATHS = [os.path.join(REPO_ROOT, "common"), os.path.join(REPO_ROOT, "expert")]
+FLAMBE_ROOT = os.environ.get("FLAMBE_ROOT", REPO_ROOT)
 FLAMBE_GATE2 = os.environ.get("FLAMBE_GATE2", os.path.join(FLAMBE_ROOT, "research", "02_experiments", "gate2"))
 FLAMBE_OUTPUT = os.environ.get("FLAMBE_OUTPUT", os.path.join(FLAMBE_ROOT, "out"))
 FLAMBE_POLICY = os.environ.get("FLAMBE_POLICY", os.path.join(FLAMBE_ROOT, "policy"))
 
-sys.path.insert(0, FLAMBE_POLICY); import lead_g2_dagger as g2d
+sys.path[:0] = [*LOCAL_MODULE_PATHS, FLAMBE_POLICY]; import lead_g2_dagger as g2d
 
 YARDS = ["syn_002", "syn_016", "syn_018", "syn_040", "syn_001", "syn_006", "syn_007", "syn_008"]
 UNSEEN = {"syn_001", "syn_006", "syn_007", "syn_008"}
